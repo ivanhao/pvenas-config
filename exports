@@ -1,0 +1,2 @@
+/z1024ghk *(rw,sync,no_root_squash,insecure)
+/export/DSM/Dload1 *(rw,sync,no_root_squash,insecure)
