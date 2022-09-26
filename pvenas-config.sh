@@ -78,12 +78,13 @@ Input folder path(like /root):
                 done
                 if [ `echo $fd|grep ${x}|wc -l` = 0 ];then
                     fdNew=$(cat /etc/fstab |grep mergerfs|awk '{print $1}')
-                    fdNew=$fdNew":"${x}" /media fuse.mergerfs defaults,allow_other,minfreespace=1M,fsname=mergerfs,use_ino 0 0"
+                    fdNew=$fdNew":"${x}" /DATA fuse.mergerfs defaults,allow_other,minfreespace=1M,fsname=mergerfs,use_ino 0 0"
                     #echo $fdNew > fdNew.txt
                     sed -i '/mergerfs/d' /etc/fstab
                     echo $fdNew >> /etc/fstab
-                    umount /media
+                    umount /DATA
                     mount -a
+                    chmod -R 755 /DATA
                     whiptail --title "Success" --msgbox "
 Configed!
 配置成功！
@@ -105,6 +106,7 @@ Configed!
 #Size | Used | Avail | Use% | Mounted on
         delMergerfs(){
             fd=$(cat /etc/fstab |grep mergerfs|awk '{print $1}'|awk -F ":" '{for(i=1;i<=NF;i++){print $i;}}')
+            count=$(echo $fd|wc -l)
             h=$(cat /etc/fstab |grep mergerfs|awk -F ":" '{print NF}')
             h=`expr $h + 20`
             x=$(whiptail --title "Del mergerfs folder" --inputbox "
@@ -121,8 +123,9 @@ $(df -h|grep mergerfs|awk '{print $6"  Size:"$2" | Used:"$3" | Avail:"$4" | Use%
 Input folder path(like /root):
 输入文件夹的路径(只需要输入/root类似的路径):
 " $h 60 "" 3>&1 1>&2 2>&3)
-            exitstatus=$?
-            if [ $exitstatus = 0 ]; then
+        exitstatus=$?
+        if [ $exitstatus = 0 ]; then
+            if [ $count != 1 ];then
                 while [ ! -d $x ]
                 do
                     whiptail --title "Success" --msgbox "Path not exist!
@@ -151,11 +154,12 @@ Input folder path(like /root):
                     done
                     fdNew=$(echo $fdNew|sed 's/:$//g')
                     echo $fdNew > fdNew.txt
-                    fdNew=$fdNew" /media fuse.mergerfs defaults,allow_other,minfreespace=1M,fsname=mergerfs,use_ino 0 0"
+                    fdNew=$fdNew" /DATA fuse.mergerfs defaults,allow_other,minfreespace=1M,fsname=mergerfs,use_ino 0 0"
                     sed -i '/mergerfs/d' /etc/fstab
                     echo $fdNew >> /etc/fstab
-                    umount /media
+                    umount /DATA
                     mount -a
+                    chmod -R 755 /DATA
                     whiptail --title "Success" --msgbox "
 Configed!
 配置成功！
@@ -168,8 +172,13 @@ Configed!
                 fi
                 delMergerfs
             else
+                whiptail --title "warning" --msgbox "Only one folder,can not delete!
+只有一个文件夹了，无法再删除！" 10 60
                 mergerfs
             fi
+        else
+            mergerfs
+        fi
 }
         delMergerfs
 
