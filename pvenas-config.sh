@@ -306,7 +306,7 @@ exitstatus=$?
 if [ $exitstatus = 0 ]; then
     case "$OPTION" in
     a | A )
-        if [ `grep samba /etc/group|wc -l` = 0 ];then
+        #if [ `grep samba /etc/group|wc -l` = 0 ];then
             if (whiptail --title "Yes/No Box" --yesno "set samba and admin user for samba?
 安装samba并配置admin为samba用户？
                 " 10 60);then
@@ -321,11 +321,11 @@ if [ $exitstatus = 0 ]; then
 已成功配置好samba，请记好samba用户admin的密码！
                 " 10 60
             fi
-        else
-            whiptail --title "Success" --msgbox "Already configed samba.
-已配置过samba，没什么可做的!
-            " 10 60
-                    fi
+        #else
+        #    whiptail --title "Success" --msgbox "Already configed samba.
+#已配置过samba，没什么可做的!
+#            " 10 60
+#        fi
         if [ ! $1 ];then
             chSamba
         fi
