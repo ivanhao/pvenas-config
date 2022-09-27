@@ -193,6 +193,28 @@ fi
 }
 
 chSamba(){
+    smbp(){
+    m=$(whiptail --title "Password Box" --passwordbox "
+    Enter samba user 'admin' password:
+    请输入samba用户admin的密码：
+                    " 10 60 3>&1 1>&2 2>&3)
+    exitstatus=$?
+    if [ $exitstatus = 0 ]; then
+        while [ true ]
+        do
+            if [[ ! `echo $m|grep "^[0-9a-zA-Z.-@]*$"` ]] || [[ $m = '^M' ]];then
+                whiptail --title "Warnning" --msgbox "
+    Wrong format!!!   input again:
+    密码格式不对！！！请重新输入：
+                " 10 60
+                smbp
+            else
+                break
+            fi
+        done
+    fi
+    }
+
 #config samba
         addSmbRecycle(){
             if(whiptail --title "Yes/No" --yesno "enable recycle?
