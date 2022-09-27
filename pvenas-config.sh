@@ -55,7 +55,7 @@ $(cat /etc/fstab |grep mergerfs|awk '{print $1}'|awk -F ":" '{for(i=1;i<=NF;i++)
 Mount info:
 挂载详情：
 -------------------------------------------------------
-$(df -h|grep mergerfs|awk '{print $6"  Size:"$2" | Used:"$3" | Avail:"$4" | Use%:"$5" |"}')
+$(df -h|grep -vE '/run|/var'|grep mergerfs|awk '{print $6"  Size:"$2" | Used:"$3" | Avail:"$4" | Use%:"$5" |"}')
 -------------------------------------------------------
 Input folder path(like /root):
 输入文件夹的路径(只需要输入/root类似的路径):
@@ -127,7 +127,7 @@ $(cat /etc/fstab |grep mergerfs|awk '{print $1}'|awk -F ":" '{for(i=1;i<=NF;i++)
 Mount info:
 挂载详情：
 -------------------------------------------------------
-$(df -h|grep mergerfs|awk '{print $6"  Size:"$2" | Used:"$3" | Avail:"$4" | Use%:"$5" |"}')
+$(df -h|grep -vE '/run|/var'|grep mergerfs|awk '{print $6"  Size:"$2" | Used:"$3" | Avail:"$4" | Use%:"$5" |"}')
 -------------------------------------------------------
 Input folder path(like /root):
 输入文件夹的路径(只需要输入/root类似的路径):
