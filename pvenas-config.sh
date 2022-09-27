@@ -84,10 +84,19 @@ Input folder path(like /root):
                     echo $fdNew >> /etc/fstab
                     umount /DATA
                     mount -a
-                    chmod -R 755 /DATA
+                    #chmod -R 777 ${x}
+                    #chmod -R 777 /DATA
+                    chgrp -R samba ${x}
+                    chmod -R g+w ${x}
+                    chgrp -R samba /DATA
+                    chmod -R g+w /DATA
                     whiptail --title "Success" --msgbox "
 Configed!
 配置成功！
+                    " 10 60
+                    whiptail --title "Success" --msgbox "
+Please reboot to apply change!
+请重启系统让配置生效！
                     " 10 60
                     #--2.3.0 add group
                 else
@@ -159,7 +168,7 @@ Input folder path(like /root):
                     echo $fdNew >> /etc/fstab
                     umount /DATA
                     mount -a
-                    chmod -R 755 /DATA
+                    chmod -R 777 /DATA
                     whiptail --title "Success" --msgbox "
 Configed!
 配置成功！
