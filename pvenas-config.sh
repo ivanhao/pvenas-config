@@ -80,9 +80,18 @@ Input folder path(like /root):
                     fdNew=$(cat /etc/fstab |grep mergerfs|awk '{print $1}')
                     fdNew=$fdNew":"${x}" /DATA fuse.mergerfs defaults,allow_other,minfreespace=1M,fsname=mergerfs,use_ino 0 0"
                     #echo $fdNew > fdNew.txt
+
+                    umount /DATA
+                    #　如果首次添加数据盘，进行数据迁移 --v1.0.4
+                    if [ `echo $fd|grep '/media'|wc -l` = 0 ];then
+                        systemctl stop docker
+                        umount /DATA
+                        rsync -a /media/ ${x}/
+                        rm -rf /media/*
+                        fdNew=${x}" /DATA fuse.mergerfs defaults,allow_other,minfreespace=1M,fsname=mergerfs,use_ino 0 0"
+                    fi
                     sed -i '/mergerfs/d' /etc/fstab
                     echo $fdNew >> /etc/fstab
-                    umount /DATA
                     mount -a
                     #chmod -R 777 ${x}
                     #chmod -R 777 /DATA
